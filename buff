@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>A simple model for the C programming language</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+
+    <h1>
+        A simple computer model for the C programming language
+    </h1>
+
+    <p>
+        In this blog post, I will lay out a simple computer model from which the main features of the C programming language will follow.
+    </p>
+
+    <p>Consider a computer as a machine having 3 main components:</p>
+    <dl>
+        <li>Compute</li>
+        <li>Storage</li>
+        <li>Network</li>
+    </dl>
+
+    <p>Think of compute as a unit that can perform some operations.</p>
+    <p>Think of storage as a bunch of cells: each cell can hold a value.</p>
+    <p>Think of network as the infrastructure that connects the compute to the storage.</p>
+
+    <h2>A primitive model</h2>
+    <p>
+        Suppose compute can do load and add operations. Storage is a bunch of cells, each cell has an address and can hold one value. Suppose we can feed the computer instructions with code like this:
+    </p>
+
+    <code>
+        <i>; <b>;</b> -> lines starting with a colon are comments<br>
+        ; <b>#num</b> -> indicates a literal value.<br>
+        ; num -> numbers without '#' are addresses.<br>
+        ; <b>load</b> the literal value 100 into cell with address 1</i><br>
+        load 1, #100 <br>
+        ; <i><b>add</b> the literal value 200 into cell with address 1</i><br>
+        add 1, #200 <br>
+    </code>
+
+    <p>
+        After running this code, we should end up with 300 in the cell with address 1.
+    </p>
+    <p>
+        This computer model assumes the following:
+        <ol>
+            <li>
+                Compute can somehow <em>read</em> the code and translate it into the respective operations.
+            </li>
+            <li>
+                Load instruction can take literal values and put them into storage.
+            </li>
+        </ol>
+    </p>
+
+    <p>This compute can add two numbers! It cannot evaluate expressions like 100+200, but it is quite easy for any one to use this compute to find the result of this expression.
+    </p>
+
+    <p>Now, let's add some more capabilities.</p>
+    <p>Suppose you want to add ten numbers, for example: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000.</p>
+    <p>We can write the following program for this:</p>
+    <code>
+        load 1, #100<br>
+        add 1, #200<br>
+        add 1, #300<br>
+        add 1, #400<br>
+        add 1, #500<br>
+        add 1, #600<br>
+        add 1, #700<br>
+        add 1, #800<br>
+        add 1, #900<br>
+        add 1, #1000<br>
+    </code>
+
+    <p>Not bad, eh? Looks good enough.</p>
+    <p>Let's add the multiple operation.</p>
+    <code>
+        mul 1, #10  ; multiples the value in cell 1 with literal 10
+    </code>
+
+    <p>
+        We can use this computer to calculate weighted sums, having weights in a bunch of cells and having some quantities in other cells. For example, if you had to calculate the total amount for a shopping list, you take the weights (price per one unit) and
+        calculate the weighted sum with the quantities.
+    </p>
+
+    <code>
+        ; Let's keep the weight values in cells 1 to 9<br>
+        load 1, #10<br>
+        load 2, #12<br>
+        load 3, #41<br>
+        load 4, #10<br>
+        load 5, #18<br>
+        load 6, #23<br>
+        load 7, #34<br>
+        load 8, #52<br>
+        load 9, #24<br>
+
+        <br>
+
+        ; Let's keep the quantities in cells 11 to 19<br>
+        load 11, #1<br>
+        load 12, #4<br>
+        load 13, #2<br>
+        load 14, #2<br>
+        load 15, #1<br>
+        load 16, #6<br>
+        load 17, #1<br>
+        load 18, #5<br>
+        load 19, #1<br>
+
+        <br>
+        ; Calculate and store the final result in cell 20<br>
+        load 20, #0 <br>
+
+        <br>
+        load 21, 1<br>
+        mul 21, 11<br>
+        add 20, 21<br>
+        <br>
+
+        load 21, 3<br>
+        mul 21, 13<br>
+        add 20, 21<br>
+        <br>
+
+        load 21, 4<br>
+        mul 21, 14<br>
+        add 20, 21<br>
+        <br>
+
+        load 21, 5<br>
+        mul 21, 15<br>
+        add 20, 21<br>
+        <br>
+
+        load 21, 6<br>
+        mul 21, 16<br>
+        add 20, 21<br>
+        <br>
+
+        load 21, 7<br>
+        mul 21, 17<br>
+        add 20, 21<br>
+        <br>
+
+        load 21, 8<br>
+        mul 21, 18<br>
+        add 20, 21<br>
+        <br>
+
+        load 21, 9<br>
+        mul 21, 19<br>
+        add 20, 21<br>
+    </code>
+
+    <p>Now, that is a lot of repetition for a small amount of detail. If we introduce a few simple features, we can simplify the code so it becomes easier to read.
+    </p>
+    <ol>
+        <li>Subtraction (and signed numbers)</li>
+        <li>Pointers</li>
+        <li>If-else</li>
+        <li>Labels and goto</li>
+    </ol>
+
+    <p>Pointers basically provide indirect addressing.</p>
+
+    <p>In code, these features look like this:</p>
+    <code>
+        sub 1, #10  ; subtract the literal value 10 from the value at address 1<br>
+
+        if 1 eq #100? goto $1 : goto $2<br>
+        label $1<br>
+        load 1, *10 ; load into cell 1, value from register whose address is the value at cell 10<br> 
+        label $2<br>
+        load 1, *20 ; load into cell 1, value from register whose address is the value at cell 20<br> 
+    </code>
+
+    <p>Now, our weighted sum program looks like this:</p>
+
+    <code>
+        ; Again, keep the weight values in cells 1 to 9<br>
+        load 1, #10<br>
+        load 2, #12<br>
+        load 3, #41<br>
+        load 4, #10<br>
+        load 5, #18<br>
+        load 6, #23<br>
+        load 7, #34<br>
+        load 8, #52<br>
+        load 9, #24<br>
+
+        <br>
+
+        ; Keep the quantities in cells 11 to 19<br>
+        load 11, #1<br>
+        load 12, #4<br>
+        load 13, #2<br>
+        load 14, #2<br>
+        load 15, #1<br>
+        load 16, #6<br>
+        load 17, #1<br>
+        load 18, #5<br>
+        load 19, #1<br>
+
+        <br>
+        load 20, #0 <br>
+
+        ; This time, we use a pointer<br>
+        load 30, #1 ; set up a pointer at cell 30 to cell 1 pointing at cell 1<br>
+        load 40, #11 ; set up another pointer at cell 32 pointing at cell 11<br>
+        load 50, #9 ; set up a counter<br>
+
+        <br>
+        label $1 ; create a label at this instruction in the code<br>
+
+        ; load value from address in cell 30 <br>
+        load 21, *30; load value from register whose address is the value at cell 30<br> 
+        mul 21, *40; load value from register whose address is the value at cell 40<br> 
+
+        add 30, #1  ; increment pointer<br>
+        add 40, #1  ; increment pointer<br>
+        sub 50, #1  ; decrement counter<br>
+
+        <br>
+        if 50 neq #0 ? goto $1: goto $2<br>
+
+        label $2<br>
+        </code>
+    <p></p>
+
+</body>
+
+</html>

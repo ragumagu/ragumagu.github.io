@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>A simple model for the C programming language</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <main>
+        <article>
+            <h1>
+                A simple computer model for the C programming language
+            </h1>
+
+            <p>
+                In this blog post, I will lay out a simple computer model from which the main features of the C programming language will follow.
+            </p>
+
+            <p>Consider a computer as a machine having 3 main components:</p>
+            <ul>
+                <li>Compute</li>
+                <li>Storage</li>
+                <li>Network</li>
+            </ul>
+
+            <p>Think of compute as a unit that can perform some operations.</p>
+            <p>Think of storage as a bunch of cells: each cell can hold a value.</p>
+            <p>Think of network as the infrastructure that connects the compute to the storage.</p>
+
+            <h2>A primitive model</h2>
+            <p>
+                Suppose compute can do load and add operations. Storage is a bunch of cells, each cell has an address and can hold one value. Suppose we can feed the computer instructions with code like this:
+            </p>
+
+
+            <div class="code-block">
+                <code>
+                <i>; <b>;</b> -&gt; lines starting with a colon are comments</i><br>
+                <i>; <b>#num</b> -&gt; indicates a literal value.</i><br>
+                ; <b>num</b> -&gt; numbers without '#' are addresses.<br>
+                ; <b>load</b> the literal value 100 into cell with address 1</i><br>
+                load 1, #100 <br>
+                ; <i><b>add</b> the literal value 200 into cell with address 1</i><br>
+                add 1, #200 <br>
+                </code>
+            </div>
+
+
+            <p>
+                After running this code, we should end up with 300 in the cell with address 1.
+            </p>
+            <p>
+                This computer model assumes the following:
+                <ol>
+                    <li>
+                        Compute can somehow <em>read</em> the code and translate it into the respective operations.
+                    </li>
+                    <li>
+                        Load instruction can take literal values and put them into storage.
+                    </li>
+                </ol>
+            </p>
+
+            <p>This compute can add two numbers! It cannot evaluate expressions like 100+200, but it is quite easy for any one to use this compute to find the result of this expression.
+            </p>
+
+            <p>Now, let's add some more capabilities.</p>
+            <p>Suppose you want to add ten numbers, for example: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000.</p>
+            <p>We can write the following program for this:</p>
+            <div class="code-block">
+                <code>
+                    load 1, #100<br>
+                    add 1, #200<br>
+                    add 1, #300<br>
+                    add 1, #400<br>
+                    add 1, #500<br>
+                    add 1, #600<br>
+                    add 1, #700<br>
+                    add 1, #800<br>
+                    add 1, #900<br>
+                    add 1, #1000<br>
+                </code>
+            </div>
+
+            <p>Not bad, eh? Looks good enough.</p>
+            <p>Let's add the multiple operation.</p>
+
+            <div class="code-block">
+                <code>
+                    mul 1, #10  ; multiples the value in cell 1 with literal 10
+                </code>
+            </div>
+
+            <p>
+                We can use this computer to calculate weighted sums, having weights in a bunch of cells and having some quantities in other cells. For example, if you had to calculate the total amount for a shopping list, you take the weights (price per one unit) and
+                calculate the weighted sum with the quantities.
+            </p>
+
+            <div class="code-block">
+                <code>
+                ; Let's keep the weight values in cells 1 to 9<br>
+                load 1, #10<br>
+                load 2, #12<br>
+                load 3, #41<br>
+                load 4, #10<br>
+                load 5, #18<br>
+                load 6, #23<br>
+                load 7, #34<br>
+                load 8, #52<br>
+                load 9, #24<br>
+
+                <br>
+
+                ; Let's keep the quantities in cells 11 to 19<br>
+                load 11, #1<br>
+                load 12, #4<br>
+                load 13, #2<br>
+                load 14, #2<br>
+                load 15, #1<br>
+                load 16, #6<br>
+                load 17, #1<br>
+                load 18, #5<br>
+                load 19, #1<br>
+
+                <br>
+                ; Calculate and store the final result in cell 20<br>
+                load 20, #0 <br>
+
+                <br>
+                load 21, 1<br>
+                mul 21, 11<br>
+                add 20, 21<br>
+                <br>
+
+                load 21, 2<br>
+                mul 21, 12<br>
+                add 20, 21<br>
+                <br>
+
+                load 21, 3<br>
+                mul 21, 13<br>
+                add 20, 21<br>
+                <br>
+
+                load 21, 4<br>
+                mul 21, 14<br>
+                add 20, 21<br>
+                <br>
+
+                load 21, 5<br>
+                mul 21, 15<br>
+                add 20, 21<br>
+                <br>
+
+                load 21, 6<br>
+                mul 21, 16<br>
+                add 20, 21<br>
+                <br>
+
+                load 21, 7<br>
+                mul 21, 17<br>
+                add 20, 21<br>
+                <br>
+
+                load 21, 8<br>
+                mul 21, 18<br>
+                add 20, 21<br>
+                <br>
+
+                load 21, 9<br>
+                mul 21, 19<br>
+                add 20, 21<br>
+            </code>
+            </div>
+
+            <p>Now, that is a lot of repetition for a small amount of detail. </p>
+            <h2>
+                Adding more features
+            </h2>
+
+            <p>If we introduce a few simple features, we can simplify the code so it becomes easier to read.
+            </p>
+            <ol>
+                <li>Subtraction (and signed numbers)</li>
+
+                <div class="code-block">
+                    <code>
+                    sub 1, #10  ; subtract the literal value 10 from the value at address 1<br>
+                    </code>
+                </div>
+
+                <li>Pointers</li>
+
+                <div class="code-block">
+                    <code>
+                    ; load into cell 1, value from cell whose address is in cell 10<br> 
+                    load 1, *10 
+                    </code>
+                </div>
+
+                <li>If-else</li>
+                <p>Compare equals and not equals with "eq" and "neq" respectively.</p>
+
+                <div class="code-block">
+                    <code>
+                        if 1 eq #100 ? add 1, #300 : add 1, #400
+                    </code>
+                </div>
+
+                <li>Labels and goto</li>
+
+                <div class="code-block">
+                    <code>
+                        if 1 eq #100? goto $1 : goto $2<br>
+                        label $1 <br>
+                        load 1, #10 <br>
+                        label $2 <br>
+                        load 1, #20 <br>
+                    </code>
+                </div>
+            </ol>
+
+            <p>We assume that the compute control can now jump to various labels.</p>
+            <p>Pointers basically provide indirect addressing. Note that the pointer cell is just like any other cell. The change is in how it is used. The <b>*</b> operator is another kind of addressing:
+            </p>
+
+            <div class="code-block">
+                <code>
+                    load 1, 10 ; loads value from cell 10 into cell 1<br>
+                    load 1, #10 ; loads literal value 10 into cell 1<br>
+                    load 1, *10 ; loads value from cell whose address is in cell 10, into cell 1
+
+
+                </code>
+            </div>
+
+            <p>Now, our weighted sum program looks like this:</p>
+
+            <div class="code-block">
+                <code>
+                    ; Again, keep the weight values in cells 1 to 9<br>
+                    load 1, #10<br>
+                    load 2, #12<br>
+                    load 3, #41<br>
+                    load 4, #10<br>
+                    load 5, #18<br>
+                    load 6, #23<br>
+                    load 7, #34<br>
+                    load 8, #52<br>
+                    load 9, #24<br>
+
+                    <br>
+
+                    ; Keep the quantities in cells 11 to 19<br>
+                    load 11, #1<br>
+                    load 12, #4<br>
+                    load 13, #2<br>
+                    load 14, #2<br>
+                    load 15, #1<br>
+                    load 16, #6<br>
+                    load 17, #1<br>
+                    load 18, #5<br>
+                    load 19, #1<br>
+
+                    <br>
+                    load 20, #0 <br>
+
+                    ; This time, we use a pointer<br>
+                    load 30, #1 ; set up a pointer at cell 30 to cell 1 pointing at cell 1<br>
+                    load 40, #11 ; set up another pointer at cell 32 pointing at cell 11<br>
+                    load 50, #9 ; set up a counter<br>
+
+                    <br>
+                    label $1 ; create a label at this instruction in the code<br>
+
+                    ; load value from address in cell 30 <br>
+                    load 21, *30; load value from cell whose address is in cell 30<br> 
+                    mul 21, *40; multiply value from cell whose address is in cell 40<br> 
+
+                    add 30, #1  ; increment pointer<br>
+                    add 40, #1  ; increment pointer<br>
+                    sub 50, #1  ; decrement counter<br>
+
+                    <br>
+                    if 50 neq #0 ? goto $1: goto $2<br>
+
+                    label $2<br>
+                </code>
+            </div>
+
+            <h2>
+                Adding some more features
+            </h2>
+
+            <p>We introduce float numbers and the square root operation.</p>
+            <h3>Floats and square roots</h3>
+
+            <div class="code-block">
+                <code>
+                    load 2, 0.5 ; store the float number 0.5 in cell 2<br>
+                    sqrt 1, 2; store the square root of value from cell 2, in cell 1<br>
+                </code>
+            </div>
+
+            <p>With this, we can write the following program:</p>
+
+            <div class="code-block">
+                <code>
+                    load 1, #3<br>
+                    load 2, #4<br>
+                    load 3, #5<br>
+                    <br>
+                    load 4, 1<br>
+                    add 4, 2<br>
+                    add 4, 3<br>
+                    load 5, 4<br>
+                    <br>
+                    load 4, 2<br>
+                    add 4, 3<br>
+                    sub 4, 1<br>
+                    mul 5, 4<br>
+                    <br>
+                    load 4, 3<br>
+                    add 4, 1<br>
+                    sub 4, 2<br>
+                    mul 5, 4<br>
+                    <br>
+                    load 4, 1<br>
+                    add 4, 2<br>
+                    sub 4, 3<br>
+                    mul 5, 4<br>
+                    <br>
+                    sqrt 6, 5<br>
+                    mul 6, #0.25<br>
+                </code>
+            </div>
+
+            <p>
+                It might not be obvious at first, but this is Heron's formula and you should end up the area of the triangle with sides 3-4-5 in cell 6. It would be incredibly tiring to do even the simplest math problems with this language. We need more expressiveness.
+                Let's introduce variables and the minus operator.
+            </p>
+
+            <h3>
+                Variables
+            </h3>
+            <p>A variable is simply a name for a storage cell. You can use refer to the cell by its name, and not worry about the address that actually holds the value.
+            </p>
+
+            <div class="code-block">
+                <code>
+                    var 1, a ; create a variable named a, which refers cell 1.
+                </code>
+            </div>
+
+            <p>The minus operator will get the negative value from a cell.</p>
+            <div class="code-block">
+                <code>
+                    load 1, -3 ; load the negative of value from cell 3, into cell 1<br>
+                    load 1, -#3 ; load literal -3 into cell 1
+                </code>
+            </div>
+
+
+            <p>We also introduce another construction: <b>ret</b> to return back, after jumping to a label. The code between the label and ret lines essentially becomes a block that can be run multiple times: forming the basis for functions. After executing
+                the lines in the block, control returns and it is passed to the next line (after the caller goto line).
+            </p>
+
+            <p>Let's rewrite the program and see if it improves with these features:</p>
+
+
+            <div class="code-block">
+                <code>
+                    var 1, a<br>
+                    var 2, b<br>
+                    var 3, c<br>
+
+                    load a, #3<br>
+                    load b, #4<br>
+                    load c, #5<br>
+                    <br>
+
+                    label $1<br>
+                    load 10, 7<br>
+                    add 10, 8<br>
+                    add 10, 9<br>
+                    ret<br>
+                    <br>
+                    load 7, a<br>
+                    load 8, b<br>
+                    load 9, c<br>
+                    goto $1<br>
+                    load 11, 10<br>
+                    <br>
+                    load 7, -a<br>
+                    load 8, b<br>
+                    load 9, c<br>
+                    goto $1<br>
+                    mul 11, 10<br>
+                    <br>
+                    load 7, a<br>
+                    load 8, -b<br>
+                    load 9, c<br>
+                    goto $1<br>
+                    mul 11, 10<br>
+                    <br>
+                    load 7, a<br>
+                    load 8, b<br>
+                    load 9, -c<br>
+                    goto $1<br>
+                    mul 11, 10<br>
+                    <br>
+                    sqrt 12, 11<br>
+                    mul 12, #0.25<br>
+                </code>
+            </div>
+
+            <p>
+                Now, with some indentation in the code, and variable names, we can observe that the variables are getting cycled around, added and multiplied. But it does not look much simpler than the previous program.
+            </p>
+
+            <p>To improve this, we actually have to introduce a way to define parameters to the function block.
+            </p>
+
+            <div class="code-block">
+                <code>
+                    var 1, a<br>
+                    var 2, b<br>
+                    var 3, c<br>
+
+                    load a, #3<br>
+                    load b, #4<br>
+                    load c, #5<br>
+                    <br>
+
+                    function $1 (x, y, z)<br>
+                    &nbsp;&nbsp; load 10, x<br>
+                    &nbsp; &nbsp; add 10, y<br>
+                    &nbsp; &nbsp; add 10, z<br>
+                    ret<br>
+                    <br>
+
+                    goto $1 (a, b, c)<br>
+                    load 11, 10<br>
+                    goto $1 (-a, b, c)<br>
+                    mul 11, 10<br>
+                    goto $1 (a, -b, c)<br>
+                    mul 11, 10<br>
+                    goto $1 (a, b, -c)<br>
+                    mul 11, 10<br>
+
+                    sqrt 12, 11<br>
+                    mul 12, #0.25<br>
+                </code>
+            </div>
+
+            <p>
+
+                With function block and parameter lists, we introduce the concept of scope and local variables. Variables x, y, z are only used within the function block =&gt; meaning they are limited in scope to the block.
+            </p>
+
+            <p>
+                We also introduce the function keyword: which indicates that there is a block of lines which will continue till the ret word is found.
+            </p>
+
+            <h2>Summary</h2>
+            <p>Starting with load and add, and a storage which can hold values, we added simple
+                properties like:
+                <ul>
+                    <li>signed numbers and subtraction</li>
+                    <li>multiplication</li>
+                    <li>pointers</li>
+                    <li>control statements, like if else and goto</li>
+                    <li>float numbers</li>
+                    <li>square roots</li>
+                    <li>variables</li>
+                    <li>function blocks</li>
+                </ul>
+                in small steps. This covers some of the basic ideas used in the C programming language.
+            </p>
+
+            <p>
+                The fact that we used pointers much before we even needed variables show how
+                simple pointers can be, and how essential and expressive they are.
+            </p>
+
+            <p>
+                For Heron's formula, it is obvious that the language and compute model 
+                described till now is nowhere as expressive as writing:
+            </p>
+
+            <div class="code-block">
+
+            <code>result = &frac14; &radic; ((a+b+c) * (-a+b+c) * (a-b+c) * (a+b-c))</code>
+            </div>
+            <p>
+                In order to do that, you would need a compiler which will have lexers and parsers,
+                which generate abstract syntax trees and intermediate code representations amongst 
+                other things, but that would not be a simple computer model anymore, would it? :)
+            </p>
+        </article>
+    </main>
+</body>
+
+</html>
