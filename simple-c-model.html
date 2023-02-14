@@ -8,7 +8,12 @@
 </head>
 
 <body>
-    <main>
+    <input id="color-mode" type="checkbox" name="color-mode">
+    <label for="color-mode">
+        <span class="dark-mode-hide">Dark Mode</span>
+        <span class="light-mode-hide">Light Mode</span>
+    </label>
+    <main class="color-scheme-wrapper">
         <article>
             <h1>
                 A simple computer model for the C programming language
@@ -465,8 +470,7 @@
             </p>
 
             <h2>Summary</h2>
-            <p>Starting with load and add, and a storage which can hold values, we added simple
-                properties like:
+            <p>Starting with load and add, and a storage which can hold values, we added simple properties like:
                 <ul>
                     <li>signed numbers and subtraction</li>
                     <li>multiplication</li>
@@ -481,23 +485,19 @@
             </p>
 
             <p>
-                The fact that we used pointers much before we even needed variables show how
-                simple pointers can be, and how essential and expressive they are.
+                The fact that we used pointers much before we even needed variables show how simple pointers can be, and how essential and expressive they are.
             </p>
 
             <p>
-                For Heron's formula, it is obvious that the language and compute model 
-                described till now is nowhere as expressive as writing:
+                For Heron's formula, it is obvious that the language and compute model described till now is nowhere as expressive as writing:
             </p>
 
             <div class="code-block">
 
-            <code>result = &frac14; &radic; ((a+b+c) * (-a+b+c) * (a-b+c) * (a+b-c))</code>
+                <code>result = &frac14; &radic; ((a+b+c) * (-a+b+c) * (a-b+c) * (a+b-c))</code>
             </div>
             <p>
-                In order to do that, you would need a compiler which will have lexers and parsers,
-                which generate abstract syntax trees and intermediate code representations amongst 
-                other things, but that would not be a simple computer model anymore, would it? :)
+                In order to do that, you would need a compiler which will have lexers and parsers, which generate abstract syntax trees and intermediate code representations amongst other things, but that would not be a simple computer model anymore, would it? :)
             </p>
 
             <p>Shrinidhi Raghunandan</p>
