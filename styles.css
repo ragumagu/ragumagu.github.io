@@ -4,6 +4,9 @@
     --bg: #fffff0;
     --text: black;
     --code-block-bg: #ffd7b5;
+    --link: blue;
+    --link-hover: blue;
+    --link-visited: purple;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -11,6 +14,9 @@
         --bg: #1a2535;
         --text: white;
         --code-block-bg: #0d121b;
+        --link: white;
+        --link-hover: rgb(206, 206, 251);
+        --link-visited: rgb(166, 166, 228);
     }
 }
 
@@ -18,6 +24,9 @@
     --bg: #1a2535;
     --text: white;
     --code-block-bg: #0d121b;
+    --link: white;
+    --link-hover: rgb(206, 206, 251);
+    --link-visited: rgb(166, 166, 228);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,9 +34,11 @@
         --bg: #fffff0;
         --text: black;
         --code-block-bg: #ffd7b5;
+        --link: blue;
+        --link-hover: blue;
+        --link-visited: purple;
     }
 }
-
 
 input[type="checkbox"] {
     opacity: 0.00001;
@@ -75,7 +86,7 @@ label {
     padding: 1rem;
     top: 1rem;
     left: 1rem;
-    display: flex; 
+    display: flex;
     border-radius: 6px;
     color: var(--bg);
 }
@@ -103,7 +114,32 @@ body {
 }
 
 p {
-  max-width: 800px;
+    max-width: 800px;
+}
+
+a {
+    color: var(--link);
+}
+
+a:link {
+    color: var(--link);
+}
+
+a:visited {
+    color: var(--link-visited);
+}
+
+a:focus {
+    color: var(--link-hover);
+}
+
+a:hover {
+    color: var(--link-hover);
+}
+
+a:active {
+    color: red;
+    outline: 1px;
 }
 
 .code-block {
