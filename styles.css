@@ -109,11 +109,23 @@ label:after {
 
 /* End of dark mode toggle */
 
-body {
-    font-size: large;
+
+/* Fonts */
+
+html {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.5em;
 }
 
-p {
+h1{
+  font-size : clamp(2rem, 4vw, 3rem);
+}
+
+h2{
+  font-size : clamp(1.5rem, 3vw, 2rem);
+}
+
+article >* {
     max-width: 800px;
 }
 

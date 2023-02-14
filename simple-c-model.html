@@ -5,6 +5,10 @@
     <title>A simple model for the C programming language</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -44,10 +48,10 @@
                 <code>
                 <i>; <b>;</b> -&gt; lines starting with a colon are comments</i><br>
                 <i>; <b>#num</b> -&gt; indicates a literal value.</i><br>
-                ; <b>num</b> -&gt; numbers without '#' are addresses.<br>
-                ; <b>load</b> the literal value 100 into cell with address 1</i><br>
+                <i>; <b>num</b> -&gt; numbers without '#' are addresses.</i><br>
+                <i>; <b>load</b> the literal value 100 into cell with address 1</i><br>
                 load 1, #100 <br>
-                ; <i><b>add</b> the literal value 200 into cell with address 1</i><br>
+                <i>; <b>add</b> the literal value 200 into cell with address 1</i><br>
                 add 1, #200 <br>
                 </code>
             </div>
@@ -94,7 +98,7 @@
 
             <div class="code-block">
                 <code>
-                    mul 1, #10  ; multiples the value in cell 1 with literal 10
+                    mul 1, #10  <i>; multiples the value in cell 1 with literal 10 </i>
                 </code>
             </div>
 
@@ -105,7 +109,7 @@
 
             <div class="code-block">
                 <code>
-                ; Let's keep the weight values in cells 1 to 9<br>
+                <i>; Let's keep the weight values in cells 1 to 9</i><br>
                 load 1, #10<br>
                 load 2, #12<br>
                 load 3, #41<br>
@@ -118,7 +122,7 @@
 
                 <br>
 
-                ; Let's keep the quantities in cells 11 to 19<br>
+                <i>; Let's keep the quantities in cells 11 to 19</i><br>
                 load 11, #1<br>
                 load 12, #4<br>
                 load 13, #2<br>
@@ -130,7 +134,7 @@
                 load 19, #1<br>
 
                 <br>
-                ; Calculate and store the final result in cell 20<br>
+                <i>; Calculate and store the final result in cell 20</i><br>
                 load 20, #0 <br>
 
                 <br>
@@ -192,7 +196,7 @@
 
                 <div class="code-block">
                     <code>
-                    sub 1, #10  ; subtract the literal value 10 from the value at address 1<br>
+                    sub 1, #10  <i>; subtract the literal value 10 from the value at address 1</i><br>
                     </code>
                 </div>
 
@@ -200,7 +204,7 @@
 
                 <div class="code-block">
                     <code>
-                    ; load into cell 1, value from cell whose address is in cell 10<br> 
+                    <i>; load into cell 1, value from cell whose address is in cell 10</i><br> 
                     load 1, *10 
                     </code>
                 </div>
@@ -233,11 +237,9 @@
 
             <div class="code-block">
                 <code>
-                    load 1, 10 ; loads value from cell 10 into cell 1<br>
-                    load 1, #10 ; loads literal value 10 into cell 1<br>
-                    load 1, *10 ; loads value from cell whose address is in cell 10, into cell 1
-
-
+                    load 1, 10 <i>; loads value from cell 10 into cell 1</i><br>
+                    load 1, #10 <i>; loads literal value 10 into cell 1</i><br>
+                    load 1, *10 <i>; loads value from cell whose address is in cell 10, into cell 1</i>
                 </code>
             </div>
 
@@ -245,7 +247,7 @@
 
             <div class="code-block">
                 <code>
-                    ; Again, keep the weight values in cells 1 to 9<br>
+                    <i>; Again, keep the weight values in cells 1 to 9</i><br>
                     load 1, #10<br>
                     load 2, #12<br>
                     load 3, #41<br>
@@ -258,7 +260,7 @@
 
                     <br>
 
-                    ; Keep the quantities in cells 11 to 19<br>
+                    <i>; Keep the quantities in cells 11 to 19</i><br>
                     load 11, #1<br>
                     load 12, #4<br>
                     load 13, #2<br>
@@ -272,21 +274,21 @@
                     <br>
                     load 20, #0 <br>
 
-                    ; This time, we use a pointer<br>
-                    load 30, #1 ; set up a pointer at cell 30 to cell 1 pointing at cell 1<br>
-                    load 40, #11 ; set up another pointer at cell 32 pointing at cell 11<br>
-                    load 50, #9 ; set up a counter<br>
+                    <i>; This time, we use a pointer</i><br>
+                    load 30, #1 <i>; set up a pointer at cell 30 to cell 1 pointing at cell 1</i><br>
+                    load 40, #11 <i>; set up another pointer at cell 32 pointing at cell 11</i><br>
+                    load 50, #9 <i>; set up a counter</i><br>
 
                     <br>
-                    label $1 ; create a label at this instruction in the code<br>
+                    label $1 <i>; create a label at this instruction in the code</i><br>
 
-                    ; load value from address in cell 30 <br>
-                    load 21, *30; load value from cell whose address is in cell 30<br> 
-                    mul 21, *40; multiply value from cell whose address is in cell 40<br> 
+                    <i>; load value from address in cell 30 </i><br>
+                    load 21, *30 <i>; load value from cell whose address is in cell 30</i><br> 
+                    mul 21, *40 <i>; multiply value from cell whose address is in cell 40</i><br> 
 
-                    add 30, #1  ; increment pointer<br>
-                    add 40, #1  ; increment pointer<br>
-                    sub 50, #1  ; decrement counter<br>
+                    add 30, #1  <i>; increment pointer</i><br>
+                    add 40, #1  <i>; increment pointer</i><br>
+                    sub 50, #1  <i>; decrement counter</i><br>
 
                     <br>
                     if 50 neq #0 ? goto $1: goto $2<br>
@@ -304,8 +306,8 @@
 
             <div class="code-block">
                 <code>
-                    load 2, 0.5 ; store the float number 0.5 in cell 2<br>
-                    sqrt 1, 2; store the square root of value from cell 2, in cell 1<br>
+                    load 2, 0.5 <i>; store the float number 0.5 in cell 2</i><br>
+                    sqrt 1, 2 <i>; store the square root of value from cell 2, in cell 1</i><br>
                 </code>
             </div>
 
@@ -355,15 +357,15 @@
 
             <div class="code-block">
                 <code>
-                    var 1, a ; create a variable named a, which refers cell 1.
+                    var 1, a <i>; create a variable named a, which refers cell 1.</i> 
                 </code>
             </div>
 
             <p>The minus operator will get the negative value from a cell.</p>
             <div class="code-block">
                 <code>
-                    load 1, -3 ; load the negative of value from cell 3, into cell 1<br>
-                    load 1, -#3 ; load literal -3 into cell 1
+                    load 1, -3 <i>; load the negative of value from cell 3, into cell 1</i><br>
+                    load 1, -#3 <i>; load literal -3 into cell 1</i> 
                 </code>
             </div>
 
@@ -500,8 +502,12 @@
                 In order to do that, you would need a compiler which will have lexers and parsers, which generate abstract syntax trees and intermediate code representations amongst other things, but that would not be a simple computer model anymore, would it? :)
             </p>
 
-            <p>Shrinidhi Raghunandan</p>
-            <p>14 February, 2023</p>
+            <p>
+                <em>
+                    Shrinidhi Raghunandan
+                </em>
+            </p>
+            <p><em>14 February, 2023</em></p>
         </article>
     </main>
 </body>
