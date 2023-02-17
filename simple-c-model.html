@@ -5,39 +5,35 @@
     <title>A simple model for the C programming language</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/styles.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <input id="color-mode" type="checkbox" name="color-mode">
-    <label for="color-mode">
-        <span class="dark-mode-hide">Dark Mode</span>
-        <span class="light-mode-hide">Light Mode</span>
-    </label>
-    <main class="color-scheme-wrapper">
-        <article>
-            <h1>
-                A simple computer model for the C programming language
-            </h1>
+    <article>
+        <h1>
+            A simple computer model for the C programming language
+        </h1>
 
-            <p>
-                In this blog post, I will lay out a simple computer model from which the main features of the C programming language will follow.
-            </p>
+        <div id="toggle-color-theme">
+        </div>
 
-            <p>Consider a computer as a machine having 3 main components:</p>
-            <ul>
-                <li>Compute</li>
-                <li>Storage</li>
-                <li>Network</li>
-            </ul>
+        <section>
+        <p>
+            In this blog post, I will lay out a simple computer model from which the main features of the C programming language will follow.
+        </p>
 
-            <p>Think of compute as a unit that can perform some operations.</p>
-            <p>Think of storage as a bunch of cells: each cell can hold a value.</p>
-            <p>Think of network as the infrastructure that connects the compute to the storage.</p>
+        <p>Consider a computer as a machine having 3 main components:</p>
+        <ul>
+            <li>Compute</li>
+            <li>Storage</li>
+            <li>Network</li>
+        </ul>
 
+        <p>Think of compute as a unit that can perform some operations.</p>
+        <p>Think of storage as a bunch of cells: each cell can hold a value.</p>
+        <p>Think of network as the infrastructure that connects the compute to the storage.</p>
+        </section>
+
+        <section>
             <h2>A primitive model</h2>
             <p>
                 Suppose compute can do load and add operations. Storage is a bunch of cells, each cell has an address and can hold one value. Suppose we can feed the computer instructions with code like this:
@@ -185,6 +181,9 @@
             </div>
 
             <p>Now, that is a lot of repetition for a small amount of detail. </p>
+
+        </section>
+        <section>
             <h2>
                 Adding more features
             </h2>
@@ -296,6 +295,8 @@
                     label $2<br>
                 </code>
             </div>
+        </section>
+        <section>
 
             <h2>
                 Adding some more features
@@ -471,8 +472,11 @@
                 We also introduce the function keyword: which indicates that there is a block of lines which will continue till the ret word is found.
             </p>
 
+        </section>
+
+        <section>
             <h2>Summary</h2>
-            <p>Starting with load and add, and a storage which can hold values, we added simple properties like:
+            <p>Starting with load and add, and a storage which can hold values, we added simple properties like:</p>
                 <ul>
                     <li>signed numbers and subtraction</li>
                     <li>multiplication</li>
@@ -483,6 +487,7 @@
                     <li>variables</li>
                     <li>function blocks</li>
                 </ul>
+            <p>
                 in small steps. This covers some of the basic ideas used in the C programming language.
             </p>
 
@@ -501,15 +506,17 @@
             <p>
                 In order to do that, you would need a compiler which will have lexers and parsers, which generate abstract syntax trees and intermediate code representations amongst other things, but that would not be a simple computer model anymore, would it? :)
             </p>
+        </section>
 
-            <p>
-                <em>
+        <p>
+            <em>
                     Shrinidhi Raghunandan
                 </em>
-            </p>
-            <p><em>14 February, 2023</em></p>
-        </article>
-    </main>
+        </p>
+        <p><em>Published: 14 February, 2023, &nbsp; Last Edited: 17 February, 2023</em></p>
+
+    </article>
+    <script src="script.js"></script>
 </body>
 
 </html>
