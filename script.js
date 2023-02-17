@@ -17,7 +17,7 @@ var theme_toggle_link = document.createElement("a");
 theme_toggle_link.href = "#";
 theme_toggle_link.innerText = "here";
 
-theme_toggle_link.onclick = (e) =>{
+theme_toggle_link.onclick = (e) => {
     e.preventDefault();
     var currentTheme = document.documentElement.getAttribute("data-theme");
     var targetTheme = "light";
@@ -25,7 +25,7 @@ theme_toggle_link.onclick = (e) =>{
     if (currentTheme === "light") {
         targetTheme = "dark";
         toggle_par.replaceChild(dark_mode_text, light_mode_text);
-    }else{
+    } else {
         toggle_par.replaceChild(light_mode_text, dark_mode_text);
     }
 
@@ -36,7 +36,7 @@ theme_toggle_link.onclick = (e) =>{
 
 toggle_par.appendChild(theme_toggle_link);
 
-if (document.documentElement.getAttribute("data-theme") === "dark"){
+if (document.documentElement.getAttribute("data-theme") === "dark") {
     toggle_par.appendChild(dark_mode_text);
 } else {
     toggle_par.appendChild(light_mode_text);
@@ -45,4 +45,6 @@ if (document.documentElement.getAttribute("data-theme") === "dark"){
 toggle_par.classList.add("sans");
 
 var theme_toggle = document.getElementById("toggle-color-theme");
-theme_toggle.replaceChildren(...[toggle_par]);
+if (!(theme_toggle === null)) {
+    theme_toggle.replaceChildren(...[toggle_par]);
+}
