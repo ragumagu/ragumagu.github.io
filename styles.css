@@ -55,9 +55,9 @@ html[data-theme='light'] {
 }
 
 html[data-theme='dark'] {
-    --background-color: #151515;
+    --background-color: #1a2535;
     --text-color: #ddd;
-    --link-color: #151515;
+    --link-color: #1a2535;
 }
 
 html {
@@ -450,6 +450,22 @@ label.margin-toggle:not(.sidenote-number) {
     height: 100%;
 }
 
+.inline {
+    width: 55%;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+nav>ul {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
 @media (max-width: 760px) {
     body {
         width: 84%;
@@ -512,6 +528,9 @@ label.margin-toggle:not(.sidenote-number) {
         width: 85%;
     }
     img {
+        width: 100%;
+    }
+    .inline {
         width: 100%;
     }
 }

@@ -5,8 +5,8 @@ if (storedTheme)
 
 
 let click_text = "Click ";
-let dark_mode_text = " to switch to dark mode.";
-let light_mode_text = " to switch to light mode.";
+let dark_mode_text = document.createTextNode(" to switch to light mode.");
+let light_mode_text = document.createTextNode(" to switch to dark mode.");
 let toggle_par = document.createElement("p");
 
 toggle_par.appendChild(document.createTextNode(click_text));
@@ -24,18 +24,22 @@ theme_toggle_link.onclick = (e) =>{
 
     if (currentTheme === "light") {
         targetTheme = "dark";
+        toggle_par.replaceChild(dark_mode_text, light_mode_text);
+    }else{
+        toggle_par.replaceChild(light_mode_text, dark_mode_text);
     }
 
     document.documentElement.setAttribute('data-theme', targetTheme)
     localStorage.setItem('theme', targetTheme);
+
 };
 
 toggle_par.appendChild(theme_toggle_link);
 
 if (document.documentElement.getAttribute("data-theme") === "dark"){
-    toggle_par.appendChild(document.createTextNode(dark_mode_text));
+    toggle_par.appendChild(dark_mode_text);
 } else {
-    toggle_par.appendChild(document.createTextNode(light_mode_text));
+    toggle_par.appendChild(light_mode_text);
 }
 
 toggle_par.classList.add("sans");
