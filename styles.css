@@ -46,18 +46,21 @@
     --background-color: #fffff8;
     --text-color: #111;
     --link-color: #151515;
+    --image-filter: none;
 }
 
 html[data-theme='light'] {
     --background-color: #fffff8;
     --text-color: #111;
     --link-color: #151515;
+    --image-filter: none;
 }
 
 html[data-theme='dark'] {
     --background-color: #1a2535;
     --text-color: #ddd;
     --link-color: #1a2535;
+    --image-filter: invert(100%);
 }
 
 html {
@@ -77,6 +80,12 @@ body {
     counter-reset: sidenote-counter;
 }
 
+figure.grayscale-diagram svg,
+figure.grayscale-diagram img,
+img.grayscale {
+    filter: var(--image-filter);
+}
+
 
 /* Adds dark mode */
 
@@ -84,6 +93,11 @@ body {
     body {
         background-color: var(--background-color);
         color: var(--text-color);
+    }
+    figure.grayscale-diagram svg,
+    figure.grayscale-diagram img,
+    img.grayscale {
+        filter: var(--image-filter);
     }
 }
 
@@ -476,7 +490,6 @@ nav>ul {
         padding-left: 8%;
         padding-right: 8%;
     }
-
     hr,
     section>h1,
     section>p,

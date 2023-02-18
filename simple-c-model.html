@@ -11,44 +11,122 @@
     <article>
         <div class="inline">
 
-        <h1><b>RAGUMAGU</b></h1>
-        <nav>
-            <ul>
-                <li><a href="/index.html">About</li>
+            <h1><b>RAGUMAGU</b></h1>
+            <nav>
+                <ul>
+                    <li><a href="/index.html">About</li>
                 <li><a href="/blog.html">Blog</a></li>
-            </ul>
-        </nav>
+                </ul>
+            </nav>
 
         </div>
         <hr>
 
         <section>
-        <h1>
-            A simple computer model for the C programming language
-        </h1>
+            <h1>
+                A simple computer model for the C programming language
+            </h1>
 
-        <span id="toggle-color-theme"></span>
+            <span id="toggle-color-theme"></span>
 
-        <p>
-            In this blog post, I will lay out a simple computer model from which the main features of the C programming language will follow.
-        </p>
+            <p>
+                The C programming language is favoured by many engineers. Programs written in C can run on machines with bare minimum computing power and memory. The language itself is quite simple, and with some reading and practice, programmers can easily keep a mental
+                model of the language in their mind.
+            </p>
+            <p>
+                Initially, you will write simple programs, and with time, you will gain the ability to guess what a program might do, just by reading its source code. You will sometimes get weird behaviour from running certain programs and you will need to know how the
+                underlying machine works, for the behaviour to make any sense. You will have to learn some history to truly understand the idioms and practices that have evolved over decades.
+            </p>
+            <p>
 
-        <p>Consider a computer as a machine having 3 main components:</p>
-        <ul>
-            <li>Compute</li>
-            <li>Storage</li>
-            <li>Network</li>
-        </ul>
+                You will realize the wisdom in certain practices, and you will recognize the mistake in certain traditions.
+            </p>
 
-        <p>Think of compute as a unit that can perform some operations.</p>
-        <p>Think of storage as a bunch of cells: each cell can hold a value.</p>
-        <p>Think of network as the infrastructure that connects the compute to the storage.</p>
+            <p>
+                The C language does not provide utilities that you can get in higher level languages. For example, when working with arrays, it is useful to know how many items it contains. But with C, you don't even get a built-in function to get this length. One would
+                think that a length function would be quite useful, but C leaves you on your own.
+            </p>
+            <p>
+
+                Arrays in C are basically syntactic sugar: they are an abstraction to help with having to iterate over memory addresses. Arrays are virtually contiguous in memory and you can assume that arrays <em>decay</em> into pointers: with a pointer
+                to the first element in the array, you can iterate over the array by dereferencing the pointer and incrementing it in a loop. However, arrays and pointers are not the same: you can't reassign an array like you can with a pointer variable.
+            </p>
+            <p>
+                If you are just starting out, all of these tiny details get in the way and you will still not understand why you just can't get the length of an array<label for="sn-array-len" class="margin-toggle sidenote-number"></label><input type="checkbox"
+                    id="sn-array-len" class="margin-toggle" />
+                <span class="sidenote">Some solutions include dividing the <em>sizeof array</em> by <em>sizeof array[0]</em>, but that hack works only in global scope. If you want length of array, just get it from the declaration or where ever you malloc. If you want it in a function, pass it as a parameter. Even if  length is dynamic, you should be using fixed-sized buffers anyway.</span>.
+                Why don't people add such obviously useful features into the language?
+            </p>
+
+            <p>
+                Languages are built to express ideas. If you have a lot of trouble finding the right words, you should try to put it across in a different way. See how it is done: you learn a lot of the language by observing how it is used. You will get used to idioms:
+                phrases which are used to convey common/frequently occuring ideas. You will gradually develop a mental model for how the language works. You will improve your understanding of the language, and become profient in it. You will know how
+                to express certain ideas efficiently, and you will know which ones to avoid.
+            </p>
+
+            <div class="epigraph">
+                <blockquote>
+                    <p>
+                        A superior pilot uses his superior judgment to avoid situations which require the use of his superior skill.
+                    </p>
+                    <footer>Frank Borman, NASA astronaut</footer>
+                </blockquote>
+            </div>
+
+            <p>
+                You will grow till you reach the limit of the language itself, at which point, you will know enough to add to it. Or you will move on to a better language.
+            </p>
+
+            <p>
+                Initially though, you will need some help learning the basics of the language. In this post, I will describe a simple computer model from which basic features of C will follow.
+            </p>
+
+            <p>Consider a computer as a machine having 2 main components:</p>
+            <ul>
+                <li>Compute</li>
+                <li>Storage</li>
+            </ul>
+
+            <p>Think of compute as a unit that can perform some operations.</p>
+            <p>Think of storage as a bunch of cells: each cell can hold a value.</p>
+
         </section>
 
         <section>
             <h2>A primitive model</h2>
             <p>
-                Suppose compute can do load and add operations. Storage is a bunch of cells, each cell has an address and can hold one value. Suppose we can feed the computer instructions with code like this:
+                Compute is a unit that can perform some operations. Let's not get into the details of how it does it<label for="sn-how-compute-works" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-how-compute-works" class="margin-toggle"
+                />
+                <span class="sidenote">
+                    Run some current through a bulb, it will give you some light. Lower the voltage, you get less light. We interpret lower voltage output as a zero and higher output voltage as one.
+                    <br>
+                    With power sources, transistors, resistors and a bunch of other electronic components, you can build circuits which can do some logic. You build a circuit, give it a zero and it will return one, give it a one and it will return zero and so on.
+                    <br>
+                    A sufficiently complex circuit can do what we can interpret as addition. You can even build a circuit which can keep results in its <em>memory</em>.
+                    <br>
+                    Now, suppose we have a <q>load</q> instruction. The letters <code>l, o, a, d</code> can be assigned numbers (with ASCII scheme, for example), and this number can then be converted into binary bits (zeros and ones). Somehow, we pass these bits
+                    to our complex computer circuit, and it will <em>understand</em> that it has to take the incoming signal and put it into some destination.
+                    <br>
+                    I will stop adding more detail to this, because the margin is too small and the explanation too long.
+            </span>. For all of our intents and purposes, the compute is an abstraction, and given inputs, it will process them and give outputs.
+            </p>
+            <p>
+                Storage is a bunch of cells, each cell has an address and can hold one value.
+            </p>
+            <p>
+                Let's define some operations for our compute. Assume, that compute can take the address of a cell from the input, and get the value in that cell. Compute can also take a value from input, and put it in another cell. Finally, compute can take two addresses,
+                and copy value from one source to destination. This is called the load operation.
+            </p>
+
+            <p>
+                We can define an add operation: take a cell address, and take a value and add the value to the value in the cell address. We can also define add to take two addresses, and add the value in the source address to the value in the destination address.
+            </p>
+
+            <p>
+                Additionally, we include a <q>comment</q> feature: our input code can contain comments which are lines ignored by the computer. Comments make code easier to understand.
+            </p>
+            <p>
+                We can feed the computer instructions with input (code) like this:
             </p>
 
 
@@ -80,10 +158,7 @@
                 </ol>
             </p>
 
-            <p>This compute can add two numbers! It cannot evaluate expressions like 100+200, but it is quite easy for any one to use this compute to find the result of this expression.
-            </p>
-
-            <p>Now, let's add some more capabilities.</p>
+            <p>This compute can add two numbers! Now, let's add some more capabilities.</p>
             <p>Suppose you want to add ten numbers, for example: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000.</p>
             <p>We can write the following program for this:</p>
             <div class="code-block">
@@ -111,8 +186,15 @@
             </div>
 
             <p>
-                We can use this computer to calculate weighted sums, having weights in a bunch of cells and having some quantities in other cells. For example, if you had to calculate the total amount for a shopping list, you take the weights (price per one unit) and
-                calculate the weighted sum with the quantities.
+                We can use this computer to calculate weighted sums<label class="margin-toggle" for="mn-weighted-sum">&#8853;</label><input type="checkbox" id="mn-weighted-sum" class="margin-toggle" /><span class="marginnote">Weighted sum is the sum of products of respective weights and quantities.</span>, having weights in a bunch of cells and having some quantities in other cells.
+            </p>
+            <figure class="grayscale-diagram">
+                <p class="svg">
+                    <img src="assets/drawing1_weighted_sum.svg" />
+                </p>
+            </figure>
+
+            <p>For example, if you had to calculate the total amount for a shopping list, you take the weights vector (price per one unit) and calculate the weighted sum with the quantities vector (number of units).
             </p>
 
             <div class="code-block">
@@ -221,7 +303,7 @@
                 </div>
 
                 <li>If-else</li>
-                <p>Compare equals and not equals with "eq" and "neq" respectively.</p>
+                <p>Compare equals and not equals with <q>eq</q> and <q>neq</q> respectively.</p>
 
                 <div class="code-block">
                     <code>
@@ -254,7 +336,42 @@
                 </code>
             </div>
 
-            <p>Now, our weighted sum program looks like this:</p>
+            <p>We can use three cells, to construct what would be a for loop:</p>
+
+            <figure class="grayscale-diagram">
+                <p class="svg">
+                    <img src="assets/pointers.svg" />
+                </p>
+            </figure>
+
+            <div class="code-block">
+                <code>
+                    load 11, #1 <i>; set up a initial value at cell 11</i><br>
+                    load 12, #9 <i>; set up a counter value at cell 12</i><br>
+                    load 13, 11 <i>; set up a pointer at cell 13</i><br>
+
+                    <br>
+                    label $1 <i>; create a label at this instruction in the code</i><br>
+
+                    <i>; load value from address in cell 30 </i><br>
+                    load 14, *13 <i>; load value from cell whose address is in cell 13</i><br> 
+
+                    add 13, #1  <i>; increment pointer</i><br>
+                    sub 12, #1  <i>; decrement counter</i><br>
+
+                    <br>
+                    if 12 neq #0 ? goto $1: goto $2<br>
+
+                    label $2<br>
+                </code>
+            </div>
+
+            <p>This loop loads all the values from cells 1 to 10 into cell 14, one at time,
+                overwriting the previous value.</p>
+            <p>We set the counter to 9 and not 10, because the check condition is after the 
+                load instruction, and so we need to go back to label $1 only 9 times. </p>
+
+            <p>We can just modify this loop to rewrite our weighted sum program:</p>
 
             <div class="code-block">
                 <code>
@@ -489,16 +606,16 @@
         <section>
             <h2>Summary</h2>
             <p>Starting with load and add, and a storage which can hold values, we added simple properties like:</p>
-                <ul>
-                    <li>signed numbers and subtraction</li>
-                    <li>multiplication</li>
-                    <li>pointers</li>
-                    <li>control statements, like if else and goto</li>
-                    <li>float numbers</li>
-                    <li>square roots</li>
-                    <li>variables</li>
-                    <li>function blocks</li>
-                </ul>
+            <ul>
+                <li>signed numbers and subtraction</li>
+                <li>multiplication</li>
+                <li>pointers</li>
+                <li>control statements, like if else and goto</li>
+                <li>float numbers</li>
+                <li>square roots</li>
+                <li>variables</li>
+                <li>function blocks</li>
+            </ul>
             <p>
                 in small steps. This covers some of the basic ideas used in the C programming language.
             </p>
@@ -521,7 +638,7 @@
         </section>
 
         <p><em>Shrinidhi Raghunandan</em></p>
-        <p><em>Published: 14 February, 2023, <br> Last Edited: 17 February, 2023.</em></p>
+        <p><em>Published: 14 February, 2023, <br> Last Edited: 18 February, 2023.</em></p>
 
     </article>
     <script src="script.js"></script>
