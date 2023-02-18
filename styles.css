@@ -453,6 +453,7 @@ label.margin-toggle:not(.sidenote-number) {
 .inline {
     width: 55%;
     display: flex;
+    flex-direction: row;
     align-items: baseline;
     justify-content: space-between;
 }
@@ -532,5 +533,6 @@ nav>ul {
     }
     .inline {
         width: 100%;
+        flex-direction: column;
     }
 }
