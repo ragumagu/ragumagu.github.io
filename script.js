@@ -2,8 +2,6 @@ var storedTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-
 if (storedTheme)
     document.documentElement.setAttribute('data-theme', storedTheme)
 
-
-
 let click_text = "Click ";
 let dark_mode_text = document.createTextNode(" to switch to light mode.");
 let light_mode_text = document.createTextNode(" to switch to dark mode.");
@@ -42,7 +40,7 @@ if (document.documentElement.getAttribute("data-theme") === "dark") {
     toggle_par.appendChild(light_mode_text);
 }
 
-toggle_par.classList.add("sans");
+toggle_par.classList.add("mono");
 
 var theme_toggle = document.getElementById("toggle-color-theme");
 if (!(theme_toggle === null)) {

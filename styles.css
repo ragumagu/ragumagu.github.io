@@ -206,6 +206,7 @@ blockquote footer {
     text-align: right;
 }
 
+section>h1,
 section>p,
 section>footer,
 section>table {
@@ -366,11 +367,12 @@ table.fullwidth {
 
 div.table-wrapper {
     overflow-x: auto;
-    font-family: "Trebuchet MS", "Gill Sans", "Gill Sans MT", sans-serif;
+    font-family: "Trebuchet MS", sans-serif;
 }
 
-.sans {
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+.mono {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: small;
     letter-spacing: .03em;
 }
 
@@ -473,7 +475,9 @@ nav>ul {
         padding-left: 8%;
         padding-right: 8%;
     }
+
     hr,
+    section>h1,
     section>p,
     section>footer,
     section>table {
