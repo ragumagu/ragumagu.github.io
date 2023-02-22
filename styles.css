@@ -388,6 +388,12 @@ div.table-wrapper {
     letter-spacing: .03em;
 }
 
+a[href*="//"]::after {
+    content: url("/assets/external_link.svg");
+    margin: 0 0 0 5px;
+    filter: var(--image-filter);
+}
+
 code,
 pre>code {
     font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;

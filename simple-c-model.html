@@ -43,8 +43,8 @@
             </p>
 
             <p>
-                The C language does not provide utilities that you can get in higher level languages. For example, when working with arrays, it is useful to know how many items it contains. But with C, you don't even get a built-in function to get this length. One would
-                think that a length function would be quite useful, but C leaves you on your own.
+                The C language does not provide utilities that you can get in higher level languages. For example, when working with arrays, you will often need to know how many items it contains. But with C, you don't even get a built-in function to get this length.
+                One would think that a length function would be quite useful, but C leaves you on your own.
             </p>
             <p>
 
@@ -54,7 +54,7 @@
             <p>
                 If you are just starting out, all of these tiny details get in the way and you will still not understand why you just can't get the length of an array<label for="sn-array-len" class="margin-toggle sidenote-number"></label><input type="checkbox"
                     id="sn-array-len" class="margin-toggle" />
-                <span class="sidenote">Some solutions include dividing the <em>sizeof array</em> by <em>sizeof array[0]</em>, but that hack works only in global scope. If you want length of array, just get it from the declaration or where ever you malloc. If you want it in a function, pass it as a parameter. Even if  length is dynamic, you should be using fixed-sized buffers anyway.</span>.
+                <span class="sidenote">Some solutions include dividing the <em>sizeof array</em> by <em>sizeof array[0]</em>, but that hack works only in global scope. If you want length of array, just get it from the declaration or where ever you malloc. If you want it in a function, pass it as a parameter. Even if  content length is dynamic, you will be using fixed-sized buffers to store such content anyway.</span>.
                 Why don't people add such obviously useful features into the language?
             </p>
 
@@ -110,28 +110,31 @@
                     I will stop adding more detail to this, because the margin is too small and the explanation too long.
             </span>. For all of our intents and purposes, the compute is an abstraction, and given inputs, it will process them and give outputs.
             </p>
-            <p>
-                Storage is a bunch of cells, each cell has an address and can hold one value.
-            </p>
-            <p>
-                Let's define some operations for our compute. Assume, that compute can take the address of a cell from the input, and get the value in that cell. Compute can also take a value from input, and put it in another cell. Finally, compute can take two addresses,
-                and copy value from one source to destination. This is called the load operation.
-            </p>
+            <p> The order in which inputs to compute are executed is called
+                <a href="https://en.wikipedia.org/wiki/Control_flow" target="_blank">control flow.</a> By default, control flow is sequential: typically starts at first line, proceeding to the next till the end is reached.
+                <p>
+                    Storage is a bunch of cells, each cell has an address and can hold one value.
+                </p>
+                <p>
+                    Let's define some operations for our compute. Assume, that compute can take the address of a cell from the input, and get the value in that cell. Compute can also take a literal value from input instruction/code, and put it into a cell. Finally, compute
+                    can take two addresses, and copy value from one source to destination. This is called the load operation.
+                </p>
 
-            <p>
-                We can define an add operation: take a cell address, and take a value and add the value to the value in the cell address. We can also define add to take two addresses, and add the value in the source address to the value in the destination address.
-            </p>
+                <p>
+                    We can define an add operation: take a cell address, and take a literal value from input and add the value to the value in the cell address. We can also define add to take two addresses, and add the value in the source address to the value in the destination
+                    address.
+                </p>
 
-            <p>
-                Additionally, we include a <q>comment</q> feature: our input code can contain comments which are lines ignored by the computer. Comments make code easier to understand.
-            </p>
-            <p>
-                We can feed the computer instructions with input (code) like this:
-            </p>
+                <p>
+                    Additionally, we include a <q>comment</q> feature: our input code can contain comments which are lines ignored by the computer. Comments make code easier to understand.
+                </p>
+                <p>
+                    We can feed the computer instructions with input (code) like this:
+                </p>
 
 
-            <div class="code-block">
-                <code>
+                <div class="code-block">
+                    <code>
                 <i>; <b>;</b> -&gt; lines starting with a colon are comments</i><br>
                 <i>; <b>#num</b> -&gt; indicates a literal value.</i><br>
                 <i>; <b>num</b> -&gt; numbers without '#' are addresses.</i><br>
@@ -140,29 +143,32 @@
                 <i>; <b>add</b> the literal value 200 into cell with address 1</i><br>
                 add 1, #200 <br>
                 </code>
-            </div>
+                </div>
 
 
-            <p>
-                After running this code, we should end up with 300 in the cell with address 1.
-            </p>
-            <p>
-                This computer model assumes the following:
-                <ol>
-                    <li>
-                        Compute can somehow <em>read</em> the code and translate it into the respective operations.
-                    </li>
-                    <li>
-                        Load instruction can take literal values and put them into storage.
-                    </li>
-                </ol>
-            </p>
+                <p>
+                    After running this code, we should end up with 300 in the cell with address 1.
+                </p>
+                <p>
+                    You might notice that this syntax is inspired by the 6502 assembly language.
+                </p>
+                <p>
+                    This computer model assumes the following:
+                    <ol>
+                        <li>
+                            Compute can somehow <em>read</em> the code and translate it into the respective operations.
+                        </li>
+                        <li>
+                            Load instruction can take literal values and put them into storage.
+                        </li>
+                    </ol>
+                </p>
 
-            <p>This compute can add two numbers! Now, let's add some more capabilities.</p>
-            <p>Suppose you want to add ten numbers, for example: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000.</p>
-            <p>We can write the following program for this:</p>
-            <div class="code-block">
-                <code>
+                <p>This compute can add two numbers! Now, let's add some more capabilities.</p>
+                <p>Suppose you want to add ten numbers, for example: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000.</p>
+                <p>We can write the following program for this:</p>
+                <div class="code-block">
+                    <code>
                     load 1, #100<br>
                     add 1, #200<br>
                     add 1, #300<br>
@@ -174,32 +180,33 @@
                     add 1, #900<br>
                     add 1, #1000<br>
                 </code>
-            </div>
+                </div>
 
-            <p>Not bad, eh? Looks good enough.</p>
-            <p>Let's add the multiple operation.</p>
+                <p>Not bad, eh? Looks good enough.</p>
+                <p>Let's add the multiply operation.</p>
 
-            <div class="code-block">
-                <code>
+                <div class="code-block">
+                    <code>
                     mul 1, #10  <i>; multiples the value in cell 1 with literal 10 </i>
                 </code>
-            </div>
+                </div>
 
-            <p>
-                We can use this computer to calculate weighted sums<label class="margin-toggle" for="mn-weighted-sum">&#8853;</label><input type="checkbox" id="mn-weighted-sum" class="margin-toggle" /><span class="marginnote">Weighted sum is the sum of products of respective weights and quantities.</span>, having weights in a bunch of cells and having some quantities in other cells.
-            </p>
-            <figure class="grayscale-diagram">
-                <p class="svg">
-                    <img src="assets/drawing1_weighted_sum.svg" />
+                <p>
+                    We can use this computer to calculate weighted sums<label class="margin-toggle" for="mn-weighted-sum">&#8853;</label><input type="checkbox" id="mn-weighted-sum" class="margin-toggle" /><span class="marginnote">Weighted sum is the sum of products of respective weights and quantities.</span>,
+                    having weights in a bunch of cells and having some quantities in other cells.
                 </p>
-            </figure>
+                <figure class="grayscale-diagram">
+                    <p class="svg">
+                        <img src="assets/drawing1_weighted_sum.svg" />
+                    </p>
+                </figure>
 
-            <p>For example, if you had to calculate the total amount for a shopping list, you take the weights vector (price per one unit) and calculate the weighted sum with the quantities vector (number of units).
-            </p>
+                <p>Weighted sums are quite useful. For example, if you had to calculate the total amount for a shopping list, you take the weights vector (price per one unit) and calculate the weighted sum with the quantities vector (number of units).
+                </p>
 
-            <div class="code-block">
-                <code>
-                <i>; Let's keep the weight values in cells 1 to 9</i><br>
+                <div class="code-block">
+                    <code>
+                <i>; Let's put some random weight values in cells 1 to 9</i><br>
                 load 1, #10<br>
                 load 2, #12<br>
                 load 3, #41<br>
@@ -212,7 +219,7 @@
 
                 <br>
 
-                <i>; Let's keep the quantities in cells 11 to 19</i><br>
+                <i>; Let's put some random quantity values in cells 11 to 19</i><br>
                 load 11, #1<br>
                 load 12, #4<br>
                 load 13, #2<br>
@@ -228,53 +235,55 @@
                 load 20, #0 <br>
 
                 <br>
-                load 21, 1<br>
-                mul 21, 11<br>
+                load 21, <b>1</b><br>
+                mul 21, <b>11</b><br>
                 add 20, 21<br>
                 <br>
 
-                load 21, 2<br>
-                mul 21, 12<br>
+                load 21, <b>2</b><br>
+                mul 21, <b>12</b><br>
                 add 20, 21<br>
                 <br>
 
-                load 21, 3<br>
-                mul 21, 13<br>
+                load 21, <b>3</b><br>
+                mul 21, <b>13</b><br>
                 add 20, 21<br>
                 <br>
 
-                load 21, 4<br>
-                mul 21, 14<br>
+                load 21, <b>4</b><br>
+                mul 21, <b>14</b><br>
                 add 20, 21<br>
                 <br>
 
-                load 21, 5<br>
-                mul 21, 15<br>
+                load 21, <b>5</b><br>
+                mul 21, <b>15</b><br>
                 add 20, 21<br>
                 <br>
 
-                load 21, 6<br>
-                mul 21, 16<br>
+                load 21, <b>6</b><br>
+                mul 21, <b>16</b><br>
                 add 20, 21<br>
                 <br>
 
-                load 21, 7<br>
-                mul 21, 17<br>
+                load 21, <b>7</b><br>
+                mul 21, <b>17</b><br>
                 add 20, 21<br>
                 <br>
 
-                load 21, 8<br>
-                mul 21, 18<br>
+                load 21, <b>8</b><br>
+                mul 21, <b>18</b><br>
                 add 20, 21<br>
                 <br>
 
-                load 21, 9<br>
-                mul 21, 19<br>
+                load 21, <b>9</b><br>
+                mul 21, <b>19</b><br>
                 add 20, 21<br>
             </code>
-            </div>
+                </div>
 
-            <p>Now, that is a lot of repetition for a small amount of detail. </p>
+                <p>
+                    Note that only source cells change, but the add and multiply parts remain the same. Surely, that is a lot of repetition for a small amount of detail.
+                </p>
 
         </section>
         <section>
@@ -284,47 +293,24 @@
 
             <p>If we introduce a few simple features, we can simplify the code so it becomes easier to read.
             </p>
-            <ol>
-                <li>Subtraction (and signed numbers)</li>
+            <h3>Subtraction (and signed numbers)</h3>
 
-                <div class="code-block">
-                    <code>
+
+            <div class="code-block">
+                <code>
                     sub 1, #10  <i>; subtract the literal value 10 from the value at address 1</i><br>
-                    </code>
-                </div>
+                </code>
+            </div>
 
-                <li>Pointers</li>
+            <h3>Pointers</h3>
 
-                <div class="code-block">
-                    <code>
+
+            <div class="code-block">
+                <code>
                     <i>; load into cell 1, value from cell whose address is in cell 10</i><br> 
                     load 1, *10 
-                    </code>
-                </div>
-
-                <li>If-else</li>
-                <p>Compare equals and not equals with <q>eq</q> and <q>neq</q> respectively.</p>
-
-                <div class="code-block">
-                    <code>
-                        if 1 eq #100 ? add 1, #300 : add 1, #400
-                    </code>
-                </div>
-
-                <li>Labels and goto</li>
-
-                <div class="code-block">
-                    <code>
-                        if 1 eq #100? goto $1 : goto $2<br>
-                        label $1 <br>
-                        load 1, #10 <br>
-                        label $2 <br>
-                        load 1, #20 <br>
-                    </code>
-                </div>
-            </ol>
-
-            <p>We assume that the compute control can now jump to various labels.</p>
+                </code>
+            </div>
             <p>Pointers basically provide indirect addressing. Note that the pointer cell is just like any other cell. The change is in how it is used. The <b>*</b> operator is another kind of addressing:
             </p>
 
@@ -336,13 +322,35 @@
                 </code>
             </div>
 
-            <p>We can use three cells, to construct what would be a for loop:</p>
+            <h3>If-else</h3>
+            <p>Compare equals and not equals with <q>eq</q> and <q>neq</q> respectively.</p>
+
+            <div class="code-block">
+                <code>
+                    if 1 eq #100 ? add 1, #300 : add 1, #400
+                </code>
+            </div>
+            <h3>Labels and goto</h3>
+            <div class="code-block">
+                <code>
+                    if 1 eq #100? goto $1 : goto $2<br>
+                    label $1 <br>
+                    load 1, #10 <br>
+                    label $2 <br>
+                    load 1, #20 <br>
+                </code>
+            </div>
+
+            <p>We assume that the compute control can now jump to various labels.</p>
+
+            <p>We can use three cells, to construct what would be a for loop<label class="margin-toggle" for="mn-for-loop">&#8853;</label><input type="checkbox" id="mn-for-loop" class="margin-toggle" /><span class="marginnote">For pointer starting at initial value, loop till counter becomes zero; incrementing the pointer and decrementing the counter every iteration of the loop. In the diagram, curr refers to the current value of the pointer.</span>                in C:</p>
 
             <figure class="grayscale-diagram">
                 <p class="svg">
                     <img src="assets/pointers.svg" />
                 </p>
             </figure>
+
 
             <div class="code-block">
                 <code>
@@ -353,7 +361,6 @@
                     <br>
                     label $1 <i>; create a label at this instruction in the code</i><br>
 
-                    <i>; load value from address in cell 30 </i><br>
                     load 14, *13 <i>; load value from cell whose address is in cell 13</i><br> 
 
                     add 13, #1  <i>; increment pointer</i><br>
@@ -366,41 +373,16 @@
                 </code>
             </div>
 
-            <p>This loop loads all the values from cells 1 to 10 into cell 14, one at time,
-                overwriting the previous value.</p>
-            <p>We set the counter to 9 and not 10, because the check condition is after the 
-                load instruction, and so we need to go back to label $1 only 9 times. </p>
+            <p>This loop loads all the values from cells 1 to 10 into cell 14, one at time, overwriting the previous value.</p>
+            <p>We set the counter to 9 and not 10, because the check condition is after the load instruction, and so we need to go back to label $1 only 9 times. </p>
 
             <p>We can just modify this loop to rewrite our weighted sum program:</p>
 
             <div class="code-block">
                 <code>
                     <i>; Again, keep the weight values in cells 1 to 9</i><br>
-                    load 1, #10<br>
-                    load 2, #12<br>
-                    load 3, #41<br>
-                    load 4, #10<br>
-                    load 5, #18<br>
-                    load 6, #23<br>
-                    load 7, #34<br>
-                    load 8, #52<br>
-                    load 9, #24<br>
-
-                    <br>
-
                     <i>; Keep the quantities in cells 11 to 19</i><br>
-                    load 11, #1<br>
-                    load 12, #4<br>
-                    load 13, #2<br>
-                    load 14, #2<br>
-                    load 15, #1<br>
-                    load 16, #6<br>
-                    load 17, #1<br>
-                    load 18, #5<br>
-                    load 19, #1<br>
-
                     <br>
-                    load 20, #0 <br>
 
                     <i>; This time, we use a pointer</i><br>
                     load 30, #1 <i>; set up a pointer at cell 30 to cell 1 pointing at cell 1</i><br>
@@ -408,12 +390,15 @@
                     load 50, #9 <i>; set up a counter</i><br>
 
                     <br>
+                    load 20, #0 <br>
                     label $1 <i>; create a label at this instruction in the code</i><br>
+                    <br>
 
-                    <i>; load value from address in cell 30 </i><br>
                     load 21, *30 <i>; load value from cell whose address is in cell 30</i><br> 
                     mul 21, *40 <i>; multiply value from cell whose address is in cell 40</i><br> 
+                    <br>
 
+                    add 20, 21  <i>; save result</i><br>
                     add 30, #1  <i>; increment pointer</i><br>
                     add 40, #1  <i>; increment pointer</i><br>
                     sub 50, #1  <i>; decrement counter</i><br>
@@ -475,7 +460,7 @@
             </div>
 
             <p>
-                It might not be obvious at first, but this is Heron's formula and you should end up the area of the triangle with sides 3-4-5 in cell 6. It would be incredibly tiring to do even the simplest math problems with this language. We need more expressiveness.
+                It might not be obvious at first, but this is Heron's formula and you should end up with the area of the triangle with sides 3-4-5 in cell 6. It would be incredibly tiring to do even the simplest math problems with this language. We need more expressiveness.
                 Let's introduce variables and the minus operator.
             </p>
 
@@ -605,7 +590,8 @@
 
         <section>
             <h2>Summary</h2>
-            <p>Starting with load and add, and a storage which can hold values, we added simple properties like:</p>
+            <p>
+                Starting with compute and storage, code and control flow, and basic instructions like load and add, we gradually expanded a primitive language to include the following concepts:</p>
             <ul>
                 <li>signed numbers and subtraction</li>
                 <li>multiplication</li>
@@ -617,7 +603,7 @@
                 <li>function blocks</li>
             </ul>
             <p>
-                in small steps. This covers some of the basic ideas used in the C programming language.
+                You can take this further and add features like structs and types, and make the language more expressive.
             </p>
 
             <p>
@@ -625,7 +611,25 @@
             </p>
 
             <p>
-                For Heron's formula, it is obvious that the language and compute model described till now is nowhere as expressive as writing:
+                If you can reason about why certain language features are built the way they are, you will find it easier to work with them. You will know where the language excels, and know what constructions best express your solution to certain problems. At the same
+                time, you will also know what features to avoid, as they won't fit your use-case at all.
+            </p>
+
+            <p>
+                If you can build simple/approximate models and explain the core features of a system with reasoning, then you will have the capacity to reason about its behaviour. 
+            </p>
+
+            <p>
+                You can then scale this logic up. When debugging large programs, you won't be able to reason about the entire system at once. However, you can take the program apart line by line, and interpret what each line is doing, and see if it matches with what you expect it to be doing.
+            </p>
+
+            <p>
+                When you encounter features in a language which don't seem obvious: try to find out
+                why it exists and what problems it solves.
+            </p>
+
+            <p>
+                <em>About Heron's formula</em>: it is obvious that the language and compute model described till now is nowhere as expressive as writing:
             </p>
 
             <div class="code-block">
@@ -638,7 +642,7 @@
         </section>
 
         <p><em>Shrinidhi Raghunandan</em></p>
-        <p><em>Published: 14 February, 2023, <br> Last Edited: 18 February, 2023.</em></p>
+        <p><em>Published: 14 February, 2023, <br> Last Edited: 23 February, 2023.</em></p>
 
     </article>
     <script src="script.js"></script>
