@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Lessons learnt from working on a Windows Server</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="/styles.css" />
+    </head>
+
+    <body>
+        <article>
+            <div class="inline">
+                <h1><b>RAGUMAGU</b></h1>
+                <nav>
+                    <ul>
+                        <li><a href="/index.html">About</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <hr />
+
+            <section>
+                <h1>Lessons learnt from working on a Remote Windows Server</h1>
+
+                <span id="toggle-color-theme"></span>
+
+                <p>
+                    I worked on a project where I developed software for use on
+                    a Windows server. The project needed video analytics and a
+                    dashboard, and I was working with fellow engineers on this.
+                    Here are some lessons I learned along the way.
+                </p>
+            </section>
+
+            <section>
+                <h2>DLLs and dependencies</h2>
+                <p>
+                    The project needed a camera, which came with software only
+                    available on Windows. So, we had Windows Server installed as
+                    the operating system.
+                </p>
+                <p>
+                    When I setup the camera viewer software on my dev machine
+                    (which also runs Windows), everything seemed alright.
+                    However, when installed on the server, it refused to turn
+                    on.
+                </p>
+                <p>
+                    There was one script which let us connect to the camera
+                    programmatically. The script worked fine on my dev machine.
+                    However, on the server, this script errored out citing
+                    missing DLLs. The problem was that it didn't report which
+                    DLLs were missing.
+                </p>
+                <p>
+                    Fortunately, my colleague figured out that we could use
+                    DUMPBIN.exe from MSVC Build Tools, to find out the missing
+                    DLLs.
+                </p>
+                <p>
+                    A sign of well-built software is getting meaningful error
+                    messages.
+                </p>
+                <p>
+                    Note to self: Don't write an error saying
+                    <q>An error occured</q>. Describe it sensibly. If something
+                    is missing, don't say <q>Some files are missing</q>.
+                    Instead, tell the user what is missing missing, so that they
+                    can then fetch the missing files and fix the issue.
+                </p>
+            </section>
+
+            <section>
+                <h2>RDP and User Access</h2>
+                <p>
+                    We needed a Remote Desktop Viewer, as SSH would not be
+                    sufficient for inspecting the live feed from the camera and
+                    testing the dashboard. We couldn't use AnyDesk or TeamViewer
+                    for long, and so we had to use RDP. Unlike SSH, RDP defaults
+                    access to only one user at a time.
+                </p>
+                <p>
+                    There are solutions to this: the official solution is to
+                    make the server a <q>Terminal Server</q>, by buying licences
+                    for this via the Windows Store.
+                </p>
+                <p>
+                    You can also use RDP Wrapper, or just edit the Termsrv.dll
+                    directly to allow multiple connections. But these solutions
+                    feel wrong and hacky.
+                </p>
+                <p>
+                    It is not unusual to have multiple teams of people working
+                    on a server at the same time. Microsoft not supporting
+                    multiple users out of the box on a server is just fishy,
+                    especially since it is about licensing, and not a technical
+                    limitation.
+                </p>
+            </section>
+
+            <section>
+                <h2>Images and Tkinter</h2>
+                <p>
+                    For viewing images on Windows Server, you get Microsoft
+                    Office Picture Manager. No complaints there, it shows the
+                    images as promised. However, it lacks in features: you can
+                    only click next and previous buttons or press left and right
+                    arrow keys to scroll through images in a folder. It doesn't
+                    even let you use the scroll wheel on your mouse.
+                </p>
+                <p>
+                    A slider or scroll bar to quickly navigate through a folder
+                    would help a lot. This use case is not uncommon: I had to
+                    pick key frames from thousands of images from the video
+                    camera.
+                </p>
+                <p>
+                    Solution to this: I made a image viewer using Tkinter and
+                    Pillow.
+                </p>
+            </section>
+
+            <section>
+                <h2>Node modules</h2>
+                <p>
+                    One of the challenges was that the server didn't have access
+                    to the public internet... Everything had to be installed
+                    offline.
+                </p>
+                <p>
+                    I would download dependencies to my dev machine, and
+                    transfer them via RDP. This worked fine for small files,
+                    however, node modules (more than 400 mb in size) would take
+                    several hours to transfer.
+                </p>
+                <p>
+                    The solution to this was to install and bundle all the
+                    dependencies into a compressed tar file. The tar file was a
+                    tenth of the size of the uncompressed files, and the
+                    transfer would finish in a few minutes.
+                </p>
+            </section>
+
+            <section>
+                <h2>Windows Services</h2>
+                <p>
+                    We had the analytics solution and a Flask app (backend)
+                    built with Python, and the frontend dashboard with React.Js.
+                    At first, I made many experiments with Python subprocesses
+                    and PowerShell scripts and executables, writing a driver to
+                    start and keep all the programs running. But that became a
+                    hairy mess quite fast: how would you restart the driver if
+                    it goes down? Its turtles all the way.
+                </p>
+                <p>
+                    We needed a way to keep them running, with simple triggers
+                    to start, stop, and restart it as needed. One way to do this
+                    this is by running the program as a Windows Service. Windows
+                    Services can be written in Python using the PyWin32
+                    extensions. However, getting it to work, debugging it and
+                    maintaining it was far more tedious than using a process
+                    manager.
+                </p>
+                <p>
+                    A process manager like pm2 lets you specify all the programs
+                    and scripts to run in a config file. You can also set up
+                    restart strategies and cron jobs if needed.
+                </p>
+                <p>
+                    Windows gets in the way again: there is no init system and
+                    running <code>pm2 startup </code> raises an error at the
+                    time of writing this post. To have pm2 start on reboot, you
+                    can add a PowerShell script to start up. If pm2 crashes, you
+                    have to just restart it manually.
+                </p>
+            </section>
+
+            <p><em>Shrinidhi Raghunandan</em></p>
+            <p><em>Published: 19 Dec, 2023.</em></p>
+        </article>
+        <script src="script.js"></script>
+    </body>
+</html>
