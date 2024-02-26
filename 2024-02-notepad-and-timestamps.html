@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Notepad and timestamps</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+    <article>
+        <div class="inline">
+            <h1><b>RAGUMAGU</b></h1>
+            <nav>
+                <ul>
+                    <li><a href="/index.html">About</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                </ul>
+            </nav>
+        </div>
+        <hr />
+
+        <section>
+            <h1>Notepad and timestamps</h1>
+
+            <span id="toggle-color-theme"></span>
+
+            <p>
+                I learnt that Notepad has this cool feature where you can press <code>F5</code>
+                to insert a timestamp at the current cursor position.
+            </p>
+
+            <p>
+                I added the same functionality to my Neovim setup using:
+            </p>
+            <pre>
+<code>
+vim.keymap.set("n", "&lt;F5&gt;",":put =strftime('%Y-%m-%d %H:%M')&lt;CR&gt;j")
+</code>
+            </pre>
+            <p>
+                This mapping inserts a timestamp on the next line (instead of current
+                cursor position), and puts the cursor on the line after (if it exists).
+            </p>
+            <p>
+                This is really useful when you want to make a log / journal entry.
+            </p>
+            <p>
+                I find this feature exciting because it is such a simple and useful
+                shortcut. Notepad is barebones and doesn't provide
+                many text editing options, and features like this are quite thoughtful.
+            </p>
+        </section>
+        <p><em>Shrinidhi Raghunandan</em></p>
+        <p><em>Published: 26 February, 2024.</em></p>
+    </article>
+    <script src="script.js"></script>
+</body>
+
+</html>
