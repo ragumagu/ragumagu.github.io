@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Casey Muratori and Reinventing the Wheel</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="/styles.css" />
+    </head>
+
+    <body>
+        <article>
+            <div class="inline">
+                <h1><b>RAGUMAGU</b></h1>
+                <nav>
+                    <ul>
+                        <li><a href="/index.html">About</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <hr />
+
+            <section>
+                <h1>Casey Muratori and Reinventing the Wheel</h1>
+
+                <span id="toggle-color-theme"></span>
+
+                <p>
+                    I present two cases where I thought
+                    <q>I have to make an app for that</q>, but ended up using
+                    solutions that already existed. Then, I present one case
+                    where I could not use existing solutions, so I had to make
+                    my own.
+                </p>
+
+                <h2>Managing software processes</h2>
+                <p>
+                    I had to deploy a project with some analytics (built with
+                    Python), a backend (built with Flask), and a frontend (built
+                    with React.Js). I needed a way to keep them running, with
+                    simple triggers to start, stop, and restart it as needed.
+                </p>
+
+                <p>
+                    At first, I made many experiments with Python subprocesses
+                    and PowerShell scripts and executables, writing a driver to
+                    start and keep all the programs running. But that became a
+                    hairy mess quite fast: how would you restart the driver if
+                    it goes down? Its turtles all the way.
+                </p>
+
+                <p>
+                    One way to do this is by running the program as a service.
+                    This was a Windows server, and Windows Services can be
+                    written in Python using the PyWin32 extensions. However,
+                    getting it to work, debugging it and maintaining it was
+                    quite hard.
+                </p>
+                <p>
+                    I realized I could use a process manager. A process manager
+                    like pm2 lets you specify all the programs and scripts to
+                    run in a config file. You can also set up restart
+                    strategies<label
+                        class="margin-toggle sidenote-number"
+                        for="mn-windows"
+                    ></label
+                    ><input
+                        type="checkbox"
+                        id="mn-windows"
+                        class="margin-toggle"
+                    /><span class="sidenote">
+                        Windows got in the way again: there is no init system
+                        and running <code>pm2 startup </code> raises an error at
+                        the time of writing this post. To have pm2 start on
+                        reboot, you can add a PowerShell script to start up. If
+                        pm2 crashes, you have to just restart it manually.
+                    </span>
+
+                    and cron jobs if needed.
+                </p>
+
+                <h2>Making vector images</h2>
+                <p>
+                    I wanted to digitally re-create some figures from a scanned
+                    document, so I could view them in more detail and play
+                    around. Some of the figures were simple bar and line plots,
+                    and I could make them easily.
+                </p>
+                <p>
+                    Some were diagrams of complex machinery, and making them
+                    isn't a straight-forward task. I had to get the scan as a
+                    vector image.
+                </p>
+                <p>PNG to vector convertors didn't work well.</p>
+                <p>
+                    I tried extracting contours from the image with a Python
+                    script, and then tried converting them into straight lines
+                    and bezier curves. But the source image was noisy, and I
+                    could not extract meaningful contours from it.
+                </p>
+                <p>
+                    I thought I would have to build an app that let me trace and
+                    save a vector image. Later, I realized I could just use
+                    Inkscape to do this. It seems obvious now, but it did not
+                    occur to me that I could do it this way, till I listed out
+                    the desired features<label
+                        class="margin-toggle sidenote-number"
+                        for="mn-js"
+                    ></label
+                    ><input
+                        type="checkbox"
+                        id="mn-js"
+                        class="margin-toggle"
+                    /><span class="sidenote">
+                        I would have to capture mouse-x and y coordinates and
+                        handle click and drag events. I would also need an
+                        algorithm that would fit a bezier curve to pass through
+                        the points I selected, and I needed a way to move the
+                        nodes, to wiggle the curve, for fitting it better. I
+                        could do this in JavaScript, and show the diagram in the
+                        background with the HTML Canvas element. I also had to
+                        figure out how to convert the coordinates into an SVG
+                        and also learn how to save this. I ignored the need for
+                        an undo stack, zoom and hundreds of other issues that I
+                        would encounter when building this.
+                    </span>
+                    for the app I would build. Inkscape even lets you draw in
+                    layers, so you can work on detailed parts individually.
+                </p>
+
+                <h2>Stepping through a video frame by frame</h2>
+                <p>
+                    I was working on a remote server, and I had to step through
+                    a lot of video, frame by frame. I needed an app which was
+                    fast enough to whiz through lots of footage and gave me
+                    keyboard shortcuts to play/pause and goto next/previous
+                    frames.
+                </p>
+                <p>
+                    VLC supports going through a video frame by frame. And many
+                    other solutions would do this out of the box. Surely I would
+                    not have to write an app for this, right? <em>Right?</em>
+                </p>
+                <p>
+                    Wrong. The server didn't have an app for that. I could not
+                    install any apps on it, because of firewalls and other
+                    restrictions. I could not download to my local machine
+                    either, because the files were too big. :/
+                </p>
+                <p>
+                    I ended up saving the frames to separate image files on
+                    disk, and wrote a small app (with Tkinter and Pillow) with a
+                    slider to scroll through.
+                </p>
+
+                <p class="text-align-center">&#9884; &#9884; &#9884;</p>
+
+                <p>
+                    If you know the fundamentals involved in a problem, you will
+                    know what is possible. You will know when to reach for an
+                    existing solution; you will appreciate and criticise it, and
+                    you will know when it is wrong. You will also know how to
+                    build a solution when you can't reach for the existing one.
+                    You might even come up with a better solution when building
+                    it.
+                </p>
+
+                <p>
+                    This resonates with what Casey Muratori said at the start of
+                    his
+                    <a
+                        href="https://guide.handmadehero.org/code/day001qa/#3410"
+                        target="_blank"
+                        >Handmade Hero</a
+                    >
+                    project, literally in episode 1. When a viewer asked the
+                    question:
+                    <q>Why not use an engine? Why reinvent the wheel?</q>, he
+                    replied:
+                </p>
+                <div>
+                    <blockquote>
+                        <p>
+                            If you start with an engine, then it changes what
+                            you're learning, from the fundamental truth of how
+                            to implement a game, to someone else's version of
+                            that. What you're really learning is that engine.
+                            You haven't learned how to make games, you've
+                            learned how to make games in that engine. Right? And
+                            if that engine were to disappear, for example, you
+                            would no longer know how to make a game at all. I'm
+                            not exaggerating this, that's just the truth.
+                        </p>
+                        <p>
+                            It always bothers me when people say
+                            <q>why reinvent the wheel</q>, because the wheel is
+                            an amazing invention. It is almost perfect -- or
+                            quite possibly perfect -- for what it does.
+                        </p>
+
+                        <p>
+                            It is something that so elegant and beautiful, that
+                            if you were to ask why we would want to reinvent it,
+                            I would say of course we do not want to reinvent it,
+                            the wheel is amazing. It has worked for thousands of
+                            years, and has been unchanged for thousands of
+                            years.
+                        </p>
+                        <p>
+                            Nothing we have developed in the past 30 years of
+                            game-development, is a wheel. In the future, we will
+                            have so much more powerful tools for game
+                            development, that people will laugh at the things we
+                            did to make games. If we want to get to a wheel, we
+                            need people that will attempt to make the wheel.
+                        </p>
+                        <footer>Casey Muratori</footer>
+                    </blockquote>
+                </div>
+
+                <p>Should you reinvent the wheel? It depends.</p>
+                <p>
+                    Should you know how to reinvent it? Yes. Wheels can always
+                    be made rounder.
+                </p>
+                <p><code>TL;DR:</code> Context is King.</p>
+            </section>
+            <p><em>Shrinidhi Raghunandan</em></p>
+            <p><em>Published: 1 March, 2024.</em></p>
+        </article>
+        <script src="script.js"></script>
+    </body>
+</html>
